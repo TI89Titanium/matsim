@@ -33,9 +33,9 @@
 		<param name="writeEventsInterval" value="50" />
 		<param name="snapshotFormat" value="" />
 	</module>
-	
+<!-- old strategy settings 	
 	<module name="strategy">
-		<param name="maxAgentPlanMemorySize" value="10" /> <!-- 0 means unlimited -->
+		<param name="maxAgentPlanMemorySize" value="10" />
 		
 		<parameterset type="strategysettings" >
 			<param name="moduleName" value="ChangeExpBeta" />
@@ -47,6 +47,18 @@
 			<param name="probability" value="0.2" />
 			<param name="disableAfterIteration" value="200" />
 		</parameterset>
+	</module>
+	-->
+	
+	<module name="strategy">
+		<param name="maxAgentPlanMemorySize" value="10" /> <!-- 0 means unlimited -->
+
+		<param name="ModuleProbability_1" value="0.8" />
+		<param name="Module_1" value="ChangeExpBeta" />
+
+		<param name="ModuleProbability_2" value="0.2" />
+		<param name="Module_2" value="ReRoute" />
+		<param name="ModuleDisableAfterIteration_2" value="200" />
 	</module>
 	
 	<module name="planCalcScore" >
