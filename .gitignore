@@ -16,6 +16,12 @@ output/
 hs_err_pid*
 
 # =========================
+# MATSim specific input files
+# =========================
+# Berlin
+run_160.150.plans_selected.xml
+
+# =========================
 # Operating System Files
 # =========================
 
