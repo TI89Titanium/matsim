@@ -32,14 +32,14 @@
 		<param name="firstIteration" value="0" />
 
 		<!-- Default=1000;  -->
-		<param name="lastIteration" value="2" />
+		<param name="lastIteration" value="1" />
 
 		<!-- Defines which mobility simulation will be used. Currently supported: qsim JDEQSim 
 		Depending on the chosen mobsim, you'll have to add additional config modules to configure the corresponding mobsim.
 		For 'qsim', add a module 'qsim' to the config. -->
 		<param name="mobsim" value="qsim" />
 
-		<param name="outputDirectory" value="../output" />
+		<param name="outputDirectory" value="../MATSimSantiago/output/" />
 
 		<!-- Possible values: failIfDirectoryExists, overwriteExistingFiles, deleteDirectoryIfExists -->
 		<param name="overwriteFiles" value="failIfDirectoryExists" />
@@ -86,7 +86,7 @@
 		<param name="filterModes" value="false" />
 
 		<!-- input file name to counts package -->
-		<param name="inputCountsFile" value="../../santiago/input/counts_merged_VEH_C01.xml" />
+		<param name="inputCountsFile" value="../MATSimSantiago/input/counts_merged_VEH_C01.xml" />
 
 		<!-- possible values: `html', `kml', `txt', `all' -->
 		<param name="outputformat" value="all" />
@@ -135,7 +135,7 @@
 
 	<module name="network" >
 		<param name="inputChangeEventsFile" value="null" />
-		<param name="inputNetworkFile" value="../../santiago/input/network_merged_cl.xml.gz" />
+		<param name="inputNetworkFile" value="../MATSimSantiago/input/network_merged_cl.xml.gz" />
 		<param name="laneDefinitionsFile" value="null" />
 		<param name="timeVariantNetwork" value="false" />
 	</module>
@@ -2969,9 +2969,9 @@
 		<param name="activityDurationInterpretation" value="tryEndTimeThenDuration" />
 
 		<!-- Path to a file containing person attributes (required file format: ObjectAttributes). -->
-		<param name="inputPersonAttributesFile" value="../../santiago/input/agentAttributes.xml" />
+		<param name="inputPersonAttributesFile" value="../MATSimSantiago/input/agentAttributes.xml" />
 
-		<param name="inputPlansFile" value="../../santiago/input/plans_final.xml.gz" />
+		<param name="inputPlansFile" value="../MATSimSantiago/input/plans_final.xml.gz" />
 
 		<!-- Defines how routes are stored in memory. Currently supported: LinkNetworkRoute, CompressedNetworkRoute. -->
 		<param name="networkRouteType" value="LinkNetworkRoute" />
@@ -3159,7 +3159,7 @@
 		<param name="transitModes" value="bus,metro,pt" />
 
 		<!-- Input file containing the transit schedule to be simulated. -->
-		<param name="transitScheduleFile" value="../../santiago/input/transitschedule_simplified.xml" />
+		<param name="transitScheduleFile" value="../MATSimSantiago/input/transitschedule_simplified.xml" />
 
 		<!-- Optional input file containing additional attributes for transit stop facilities, stored as ObjectAttributes. -->
 		<param name="transitStopsAttributesFile" value="null" />
@@ -3168,7 +3168,7 @@
 		<param name="useTransit" value="true" />
 
 		<!-- Input file containing the vehicles used by the departures in the transit schedule. -->
-		<param name="vehiclesFile" value="../../santiago/input/transitvehicles.xml" />
+		<param name="vehiclesFile" value="../MATSimSantiago/input/transitvehicles.xml" />
 	</module>
 
 <!-- ====================================================================== -->
