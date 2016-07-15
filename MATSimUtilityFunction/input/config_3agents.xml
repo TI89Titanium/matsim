@@ -2941,7 +2941,7 @@
 		<param name="activityDurationInterpretation" value="tryEndTimeThenDuration" />
 
 		<!-- Path to a file containing person attributes (required file format: ObjectAttributes). -->
-		<param name="inputPersonAttributesFile" value="../MATSimUtilityFunction/input/agentAttributes.xml" />
+		<param name="inputPersonAttributesFile" value="../MATSimUtilityFunction/input/agentAttributes_3agents.xml" />
 
 		<param name="inputPlansFile" value="../MATSimUtilityFunction/input/plans_3agents.xml" />
 
