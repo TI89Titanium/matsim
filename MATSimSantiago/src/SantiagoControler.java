@@ -16,7 +16,7 @@ public class SantiagoControler {
 		controler.run();
 		*/
 		String inputFilePath[] = {"input/config_baseCase.xml"};
-		SantiagoScenarioRunner.main(inputFilePath);
+		SantiagoScenarioRunner_new.main(inputFilePath);
 	}
 
 }

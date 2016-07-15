@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package playground.santiago.run;
+package sources_santiago;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +29,6 @@ import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
-import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
@@ -42,6 +41,7 @@ import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.algorithms.TransportModeNetworkFilter;
+import org.matsim.core.population.ActivityImpl;
 import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
 import org.matsim.core.replanning.PlanStrategy;
 import org.matsim.core.replanning.PlanStrategyImpl.Builder;
@@ -50,10 +50,6 @@ import org.matsim.core.replanning.modules.SubtourModeChoice;
 import org.matsim.core.replanning.selectors.RandomPlanSelector;
 import org.matsim.core.router.TripRouter;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.roadpricing.ControlerDefaultsWithRoadPricingModule;
-import org.matsim.roadpricing.RoadPricingConfigGroup;
-
-import com.google.inject.Binder;
 
 import playground.santiago.SantiagoScenarioConstants;
 
@@ -65,32 +61,30 @@ import javax.inject.Provider;
  *
  */
 public class SantiagoScenarioRunner {
-	private static String inputPath = "../../../runs-svn/santiago/policy1/input/";
-//	private static String inputPath = "net/ils4/lcamus/runs-svn/santiago/cluster_2/input/";
+//	private static String inputPath = "../../../runs-svn/santiago/run20/input/";
+//	private static boolean doModeChoice = false;
+	private static String inputPath = "../../../runs-svn/santiago/run40/input/";
 	private static boolean doModeChoice = true;
-//	private static boolean mapActs2Links = true;
-	private static boolean mapActs2Links = false;
-	
-	private static boolean pricing = false;
-	private static double sigma = 3.0;
 	
 	private static String configFile;
 	
 	public static void main(String args[]){
-
+//		OTFVis.convert(new String[]{
+//						"",
+//						outputPath + "modeChoice.output_events.xml.gz",	//events
+//						outputPath + "modeChoice.output_network.xml.gz",	//network
+//						outputPath + "visualisation.mvi", 		//mvi
+//						"60" 									//snapshot period
+//		});
+//		OTFVis.playMVI(outputPath + "visualisation.mvi");
+		
 		if(args.length==0){
-			configFile = inputPath + "new-input/randomized_config_final.xml";
-//			configFile = inputPath + "config_triangleCordon.xml";
+			configFile = inputPath + "config_final.xml";
 		} else {
 			configFile = args[0];
-			mapActs2Links = Boolean.parseBoolean(args[1]);
-			pricing = Boolean.parseBoolean(args[2]);
 		}
 		
 		Config config = ConfigUtils.loadConfig(configFile);
-//		config.controler().setOutputDirectory(outputDirectory);
-//		config.qsim().setNumberOfThreads(1);
-//		config.parallelEventHandling().setNumberOfThreads(1);
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 
 //		config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
@@ -110,20 +104,7 @@ public class SantiagoScenarioRunner {
 		if(doModeChoice) setModeChoiceForSubpopulations(controler);
 		
 		// mapping agents' activities to links on the road network to avoid being stuck on the transit network
-		if(mapActs2Links) mapActivities2properLinks(scenario);
-		
-		if (pricing){			
-			
-		RoadPricingConfigGroup rpcg = ConfigUtils.addOrGetModule(config, RoadPricingConfigGroup.GROUP_NAME, RoadPricingConfigGroup.class);
-		rpcg.setTollLinksFile(inputPath + "outerCordon.xml");
-		// adding some randomness to the router so to explore more possible routes.
-		config.plansCalcRoute().setRoutingRandomness(sigma); 
-		// adding roadpricing contrib for cordon policies
-		controler.setModules(new ControlerDefaultsWithRoadPricingModule());
-	
-
-		
-		}
+		mapActivities2properLinks(scenario);
 		
 		controler.run();
 	}
@@ -133,8 +114,8 @@ public class SantiagoScenarioRunner {
 		for(Person person : scenario.getPopulation().getPersons().values()){
 			for (Plan plan : person.getPlans()) {
 				for (PlanElement planElement : plan.getPlanElements()) {
-					if (planElement instanceof Activity) {
-						Activity act = (Activity) planElement;
+					if (planElement instanceof ActivityImpl) {
+						ActivityImpl act = (ActivityImpl) planElement;
 						Id<Link> linkId = act.getLinkId();
 						if(!(linkId == null)){
 							throw new RuntimeException("Link Id " + linkId + " already defined for this activity. Aborting... ");
@@ -236,8 +217,7 @@ public class SantiagoScenarioRunner {
 				final String[] chainBasedModes2 = {};
 				addPlanStrategyBinding(nameMcNonCarAvail).toProvider(new SubtourModeChoiceProvider(availableModes2, chainBasedModes2));
 			}
-		});		
-
+		});
 	}
 	/**
 	 * @author benjamin
