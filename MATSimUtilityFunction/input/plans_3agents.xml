@@ -55,6 +55,8 @@
 
 <!-- ====================================================================== -->
 
+<!-- mode colectivo not yet implemented
+
 	<person id="10119001">
 		<plan score="84.98559506579373" selected="yes">
 			<act type="othe10.0H" link="862" x="336742.1729326375" y="6262208.7818676215" end_time="10:47:29" />
@@ -97,6 +99,58 @@
 		</plan>
 
 	</person>
-	
+
+-->
+
+<!-- ====================================================================== -->
+
+	<person id="10119002">
+		<plan score="79.7041622097017" selected="yes">
+			<act type="home9.0H" link="5777" x="338845.09375" y="6268241.5" end_time="07:37:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5777" end_link="22444" trav_time="00:26:05" distance="4348.583585711056"></route>
+			</leg>
+			<act type="work0.5H" link="22444" x="338929.4688" y="6264897.5" end_time="08:03:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="22444" end_link="5776" trav_time="00:26:05" distance="4348.5835840715135"></route>
+			</leg>
+			<act type="othe0.5H" link="5776" x="338845.0938" y="6268241.5" end_time="08:32:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5776" end_link="22444" trav_time="00:26:05" distance="4348.5835840715135"></route>
+			</leg>
+			<act type="work9.0H" link="22444" x="338929.4688" y="6264897.5" end_time="18:07:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="22444" end_link="5776" trav_time="00:26:05" distance="4348.5835840715135"></route>
+			</leg>
+			<act type="home0.5H" link="5776" x="338845.0938" y="6268241.5" end_time="19:22:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5776" end_link="5777" trav_time="00:02:57" distance="493.70607001448235"></route>
+			</leg>
+			<act type="othe0.5H" link="5777" x="338500.4375" y="6268401.0" end_time="19:37:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5777" end_link="5777" trav_time="00:02:57" distance="493.70601102504884"></route>
+			</leg>
+			<act type="home1.0H" link="5777" x="338845.09375" y="6268241.5" end_time="21:07:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5777" end_link="5777" trav_time="00:02:57" distance="493.70601102504884"></route>
+			</leg>
+			<act type="othe0.5H" link="5777" x="338500.4375" y="6268401.0" end_time="21:22:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5777" end_link="5777" trav_time="00:02:57" distance="493.70601102504884"></route>
+			</leg>
+			<act type="home0.5H" link="5777" x="338845.09375" y="6268241.5" end_time="22:07:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5777" end_link="5777" trav_time="00:02:57" distance="493.70601102504884"></route>
+			</leg>
+			<act type="othe0.5H" link="5777" x="338500.4375" y="6268401.0" end_time="22:22:44" />
+			<leg mode="bike">
+				<route type="generic" start_link="5777" end_link="5777" trav_time="00:02:57" distance="493.70601102504884"></route>
+			</leg>
+			<act type="home9.0H" link="5777" x="338845.09375" y="6268241.5" />
+		</plan>
+
+	</person>
+
+<!-- ====================================================================== -->
 	
 </population>
