@@ -1,6 +1,7 @@
 package utilityfunction.controler;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.TransportMode;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.StrategyConfigGroup.StrategySettings;
@@ -9,6 +10,7 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.utils.objectattributes.ObjectAttributes;
 
 import utilityfunction.constants.UtilityFunctionConstants;
 
@@ -34,6 +36,18 @@ public class UtilityFunctionControler {
 		Config config = ConfigUtils.loadConfig(configFile);
 		
 		Scenario scenario = ScenarioUtils.loadScenario(config);
+		
+		//add agent characteristcs-boolean to Attribute file
+		final String DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE = "DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE";
+		final ObjectAttributes personAttributes = scenario.getPopulation().getPersonAttributes();
+		for (Person person : scenario.getPopulation().getPersons().values()) {
+			if (Integer.parseInt(person.getId().toString()) % 2 == 0) {
+				personAttributes.putAttribute(person.getId().toString(), DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE, true);
+			} else {
+				personAttributes.putAttribute(person.getId().toString(), DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE, false);
+			}
+		}
+		
 		
 		Controler controler = new Controler(scenario);
 	
