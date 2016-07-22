@@ -21,7 +21,7 @@ import org.matsim.core.scoring.functions.CharyparNagelScoringParameters;
 import org.matsim.utils.objectattributes.ObjectAttributes;
 
 import utilityfunction.constants.UtilityFunctionConstants;
-import utilityfunction.scoring.UtilityFunctionScoringFunctionFactory;
+
 
 public class UtilityFunctionControler {
 	
@@ -80,6 +80,7 @@ public class UtilityFunctionControler {
 				SumScoringFunction sumScoringFunction = new SumScoringFunction();
 
 				// Score activities, legs, payments and being stuck
+				// with the default MATSim scoring (formulated by Charypar and Nagel) based on utility parameters in the config file.
 				//TODO: define own scoring functions (leg- and maybe money-scoring)
 				final CharyparNagelScoringParameters params =
 						new CharyparNagelScoringParameters.Builder(scenario, person.getId()).build();
@@ -87,6 +88,8 @@ public class UtilityFunctionControler {
 				sumScoringFunction.addScoringFunction(new CharyparNagelLegScoring(params, scenario.getNetwork()));
 				sumScoringFunction.addScoringFunction(new CharyparNagelMoneyScoring(params));
 				sumScoringFunction.addScoringFunction(new CharyparNagelAgentStuckScoring(params));
+				
+				return sumScoringFunction;
 			}
 		});
 		
