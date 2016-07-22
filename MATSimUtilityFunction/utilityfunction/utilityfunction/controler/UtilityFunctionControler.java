@@ -10,9 +10,18 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.core.scoring.ScoringFunction;
+import org.matsim.core.scoring.ScoringFunctionFactory;
+import org.matsim.core.scoring.SumScoringFunction;
+import org.matsim.core.scoring.functions.CharyparNagelActivityScoring;
+import org.matsim.core.scoring.functions.CharyparNagelAgentStuckScoring;
+import org.matsim.core.scoring.functions.CharyparNagelLegScoring;
+import org.matsim.core.scoring.functions.CharyparNagelMoneyScoring;
+import org.matsim.core.scoring.functions.CharyparNagelScoringParameters;
 import org.matsim.utils.objectattributes.ObjectAttributes;
 
 import utilityfunction.constants.UtilityFunctionConstants;
+
 
 public class UtilityFunctionControler {
 	
@@ -37,7 +46,7 @@ public class UtilityFunctionControler {
 		
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 		
-		//add agent characteristcs-boolean to Attribute file
+		//add agent characteristcs-boolean to Attribute file for test purpose
 		final String DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE = "DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE";
 		final ObjectAttributes personAttributes = scenario.getPopulation().getPersonAttributes();
 		for (Person person : scenario.getPopulation().getPersons().values()) {
@@ -47,8 +56,7 @@ public class UtilityFunctionControler {
 				personAttributes.putAttribute(person.getId().toString(), DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE, false);
 			}
 		}
-		
-		
+
 		Controler controler = new Controler(scenario);
 	
 //TODO: define routing for other modes beside car or define other modes
@@ -61,9 +69,33 @@ public class UtilityFunctionControler {
 		setBasicStrategiesForSubpopulations(controler);
 		
 //TODO: mapping agents' activities to links on the road network to avoid being stuck on the transit network
+
+
+		// add new scoring function via ScoringFunctionFactory Interface.
+		// Do this as an anonymous class, so it has access to all variables and methods in this class.
+		controler.setScoringFunctionFactory(new ScoringFunctionFactory() {
+			
+			@Override
+			public ScoringFunction createNewScoringFunction(Person person) {
+				SumScoringFunction sumScoringFunction = new SumScoringFunction();
+
+				// Score activities, legs, payments and being stuck
+				// with the default MATSim scoring (formulated by Charypar and Nagel) based on utility parameters in the config file.
+				//TODO: define own scoring functions (leg- and maybe money-scoring)
+				final CharyparNagelScoringParameters params =
+						new CharyparNagelScoringParameters.Builder(scenario, person.getId()).build();
+				sumScoringFunction.addScoringFunction(new CharyparNagelActivityScoring(params));
+				sumScoringFunction.addScoringFunction(new CharyparNagelLegScoring(params, scenario.getNetwork()));
+				sumScoringFunction.addScoringFunction(new CharyparNagelMoneyScoring(params));
+				sumScoringFunction.addScoringFunction(new CharyparNagelAgentStuckScoring(params));
+				
+				return sumScoringFunction;
+			}
+		});
 		
 		controler.run();
 	}
+	
 
 	// methods for routing-settings for all modes
 	private static void setNetworkModeRouting(Controler controler) {
