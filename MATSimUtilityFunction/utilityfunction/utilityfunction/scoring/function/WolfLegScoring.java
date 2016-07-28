@@ -7,7 +7,7 @@ import org.matsim.api.core.v01.population.Leg;
  * This is a implementation of the utlity function with additional parameters based on the CharyparNagel function
  * from the MATSim Score
  * 
- * @author Maximilian Wolf (GitHub: <a href="https://github.com/TI89Titanium">TI89Titanium</a>
+ * @author Maximilian Wolf (GitHub: <a href="https://github.com/TI89Titanium">TI89Titanium</a>)
  */
 
 public class WolfLegScoring implements org.matsim.core.scoring.SumScoringFunction.LegScoring, org.matsim.core.scoring.SumScoringFunction.ArbitraryEventScoring {
