@@ -23,6 +23,7 @@ public class SurveyDataPreparation {
 	//read file 
 	
 	//getter (return map)
+	//test-getter: print Column (First 10 Entries)
 	public void printColumn (int column){
 		try {
 
