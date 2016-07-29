@@ -7,8 +7,18 @@ public class PopulationMatching {
 		String csvFile = "C:/Users/Maximilian/Dropbox/01_KIT/Abschlussarbeit/UtilityMobility/Files/MIWDataRaw.csv";
 		
 		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
-		int column = 0;
-		SurveyDataPreparation.printColumn(column);
+		
+		//Test getter method (print out first column of csv with an index
+		int column = 0;	
+		String[] columnName =  SurveyDataPreparation.getSurveyPopulationColumnNameArray();
+		String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray();
+		int length = surveyPopulation.length;
+		
+			System.out.println(columnName[column]);
+			
+			for (int i=0; i<length; i++){
+				System.out.println(i+1 + " " + surveyPopulation[i][column]);
+			}
 		
 		// TODO read/prepare population data
 		// TODO match population input: pop-data + survey data
