@@ -8,16 +8,24 @@ public class PopulationMatching {
 		
 		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
 		
-		//Test getter method (print out first column of csv with an index
-		int column = 0;	
-		String[] columnName =  SurveyDataPreparation.getSurveyPopulationColumnNameArray();
-		String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray();
+		//Test getter method (print out first column of csv with an index)
+//		int column = 0;	
+//		String[] columnName =  SurveyDataPreparation.getSurveyPopulationColumnNameArray();
+		
+		String[] columnSelection = {"UserID", "DTWmax"};
+		
+		String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
 		int length = surveyPopulation.length;
 		
-			System.out.println(columnName[column]);
-			
+//			System.out.println(columnName[column]);
+			//print out Array:
 			for (int i=0; i<length; i++){
-				System.out.println(i+1 + " " + surveyPopulation[i][column]);
+				System.out.print(i+1 + " ");
+				for (int j=0; j<surveyPopulation[i].length; j++){
+				
+				System.out.print(surveyPopulation[i][j] + " ");
+				}
+				System.out.println("");
 			}
 		
 		// TODO read/prepare population data
