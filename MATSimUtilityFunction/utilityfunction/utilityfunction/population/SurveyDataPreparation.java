@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class SurveyDataPreparation {
@@ -102,6 +103,33 @@ public class SurveyDataPreparation {
 	//getter (return String Array)
 	public String[][] getSurveyPopulationArray(){
 		return this.surveyPopulation;
+	}
+	
+	public String[][] getSurveyPopulationArray(String[] columnSelection){
+		int numberOfColumns = columnSelection.length;
+		int numberOfRows = surveyPopulation.length;
+		Integer [] columnIdx = new Integer[numberOfColumns];
+		String [][] surveyPopulationColumnSelection = new String[numberOfRows][numberOfColumns];
+		
+		//Search for String (columnName)
+		for (int i=0; i<numberOfColumns; i++){
+			columnIdx[i] = Arrays.asList(columnName).indexOf(columnSelection[i]);
+		}
+		
+		for (int i=0; i<numberOfRows; i++){
+			for (int j=0; j<numberOfColumns; j++){
+					//Fill Selection array
+				if (surveyPopulation[i].length<columnIdx[j]){
+					surveyPopulationColumnSelection[i][j] = "";
+				}
+				else {
+					surveyPopulationColumnSelection[i][j] = surveyPopulation[i][columnIdx[j]];
+				}
+			}
+		}
+		
+		
+		return surveyPopulationColumnSelection;
 	}
 	
 	public String[] getSurveyPopulationColumnNameArray(){
