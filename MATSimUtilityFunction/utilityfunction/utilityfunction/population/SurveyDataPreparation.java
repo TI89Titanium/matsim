@@ -5,58 +5,111 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+
 public class SurveyDataPreparation {
 
 	//declaration
 	String csvFile;
 	BufferedReader br = null;
     String line = "";
-    String cvsSplitBy = ";";
+    String cvsSplitBy = ";"; //use semicolon as separator
+    //survey-population with id, distance to work, main-mode
+    String [] columnName;
+    String[][] surveyPopulation;
+    
+    //private final ObjectAttributes personAttributes = new ObjectAttributes(); //Attributes (distance to work, main-mode)
+    //Map<Id<Person>, ObjectAttributes> surveyPopulation = new Map<Id<Person>, ObjectAttributes>();
+
 
 	//constructor (input file (String))
 	public SurveyDataPreparation(String csvFile){
 		this.csvFile = csvFile;
-		
+		this.surveyPopulation = readFile();
 
         
 	}
 	//read file 
-	
-	//getter (return map)
-	//test-getter: print Column (First 10 Entries)
-	public void printColumn (int column){
+	//read file save in array or hasmap
+	private String[][] readFile(){
+		
+		int numberOfLines = 0;
+		//get number of lines (persons)
 		try {
 
-            br = new BufferedReader(new FileReader(csvFile));
-            for (int i=0; i<11; i++){
-            	line = br.readLine();
-            	String[] person = line.split(cvsSplitBy);
-            	System.out.println(person[column]);
-            	
-            }
-//            while ((line = br.readLine()) != null) {
+	        br = new BufferedReader(new FileReader(csvFile));
+	                  	        	        
+	        while (((line = br.readLine()) != null)) {   
+	        	numberOfLines++;
+	    	 }
+	        
 
-                // use semicolon as separator
-  //              String[] person = line.split(cvsSplitBy);
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (br != null) {
+	            try {
+	                br.close();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }	
+		
+		surveyPopulation = new String[numberOfLines-1][];//initialise without columnName-Line
+		
+	try {
 
-    //            System.out.println("Person-ID [code= " + country[4] + " , name=" + country[5] + "]");
+        br = new BufferedReader(new FileReader(csvFile));
+        
+        
+        int i = 0;
+        
+        	        
+        while (((line = br.readLine()) != null)) {
 
-      //      }
+        	if (i==0){
+        		columnName = line.split(cvsSplitBy); //use semicolon as separator
+        	}
+        	else {
+        		surveyPopulation[i-1] = line.split(cvsSplitBy);
+        	}
+        
+        	
+        	i++;
+    	 }
+        
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+    }
+	
+	return surveyPopulation;
+	
 	}
+	
+	//getter (return String Array)
+	public String[][] getSurveyPopulationArray(){
+		return this.surveyPopulation;
+	}
+	
+	public String[] getSurveyPopulationColumnNameArray(){
+		return this.columnName;
+	}
+	//test-getter: print Column (First 10 Entries)
+
+		
 	
 	//setter
 	
