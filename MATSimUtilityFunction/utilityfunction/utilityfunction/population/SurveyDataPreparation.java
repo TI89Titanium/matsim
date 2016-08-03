@@ -102,6 +102,7 @@ public class SurveyDataPreparation {
 	
 	//getter (return String Array)
 	public String[][] getSurveyPopulationArray(){
+		surveyPopulation = translatePopulationData(surveyPopulation);
 		return this.surveyPopulation;
 	}
 	
@@ -127,6 +128,9 @@ public class SurveyDataPreparation {
 				}
 			}
 		}
+		if(columnSelection[0].equals("UserID")){
+			surveyPopulationColumnSelection = translatePopulationData(surveyPopulationColumnSelection);
+		}
 		
 		
 		return surveyPopulationColumnSelection;
@@ -135,7 +139,20 @@ public class SurveyDataPreparation {
 	public String[] getSurveyPopulationColumnNameArray(){
 		return this.columnName;
 	}
-	//test-getter: print Column (First 10 Entries)
+	
+	private String[][] translatePopulationData(String[][] surveyPopulation){
+		
+		//output: MatSim Population File
+		
+		//add sufix to ID (first column)
+		String surveyPopulationPrefix = "SP";
+		for (int i=0; i<surveyPopulation.length; i++){
+			surveyPopulation[i][0] = surveyPopulationPrefix + surveyPopulation[i][0];
+		}
+		
+		
+		return surveyPopulation;
+	}
 
 		
 	
