@@ -1,5 +1,7 @@
 package utilityfunction.population;
 
+import java.util.List;
+
 public class PopulationMatching {
 
 	public static void main(String[] args) {
@@ -14,27 +16,31 @@ public class PopulationMatching {
 		
 		String[] columnSelection = {"UserID", "DTWmax","MOS3","MOS4"};
 		
-		String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
-		
+		//get Array with Population only with data in specific columns
+		//String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
+		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
+		//get population
 		
 		
 		//Test: print out array
-		int length = surveyPopulation.length;		
+		int length = surveyPopulationList.size();		
 //			System.out.println(columnName[column]);
 			//print out Array:
 			for (int i=0; i<length; i++){
 				System.out.print(i+1 + " ");
-				for (int j=0; j<surveyPopulation[i].length; j++){
+				for (int j=0; j<surveyPopulationList.get(i).length; j++){
 				
-				System.out.print(surveyPopulation[i][j] + " ");
+				System.out.print(surveyPopulationList.get(i)[j] + " ");
 				}
 				System.out.println("");
 			}
-		
-		// TODO read/prepare population data
+
+			
+		}
+
 		// TODO match population input: pop-data + survey data
 		
 
 	}
 // TODO Constructor: get all variables and files necessary (maybe: get config file)
-}
+
