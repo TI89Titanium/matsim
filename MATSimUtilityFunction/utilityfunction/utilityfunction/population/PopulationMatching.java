@@ -12,11 +12,14 @@ public class PopulationMatching {
 //		int column = 0;	
 //		String[] columnName =  SurveyDataPreparation.getSurveyPopulationColumnNameArray();
 		
-		String[] columnSelection = {"UserID", "DTWmax"};
+		String[] columnSelection = {"UserID", "DTWmax","MOS3","MOS4"};
 		
 		String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
-		int length = surveyPopulation.length;
 		
+		
+		
+		//Test: print out array
+		int length = surveyPopulation.length;		
 //			System.out.println(columnName[column]);
 			//print out Array:
 			for (int i=0; i<length; i++){
