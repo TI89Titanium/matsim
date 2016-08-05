@@ -20,34 +20,41 @@ public class PopulationMatching {
 		//get Array with Population only with data in specific columns
 		//String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
 		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
-		
-		
+		//testPrintSurveyPop(surveyPopulationList);
 		
 		//get population + get Data from Population (act + modes)
-		MATSimPopulationPreparation MATSimPopulationPreparation = new MATSimPopulationPreparation(configFile);
+		MATSimPopulationPreparation matSimPopulationPreparation = new MATSimPopulationPreparation(configFile);
+		
+		List <String[]> matSimPopulationList = matSimPopulationPreparation.getMATSimPopulationList();
+		
+		testPrintMATSimPopList(matSimPopulationList);
 		
 		
-		//add attributes to existing population
-		
-		//Test: print out array
-		int length = surveyPopulationList.size();		
-//			System.out.println(columnName[column]);
-			//print out Array:
-			for (int i=0; i<length; i++){
-				System.out.print(i+1 + " ");
-				for (int j=0; j<surveyPopulationList.get(i).length; j++){
-				
-				System.out.print(surveyPopulationList.get(i)[j] + " ");
-				}
-				System.out.println("");
-			}
-
-			
-		}
-
 		// TODO match population input: pop-data + survey data
 		
 
 	}
+	//Test: print out array
+	public static void testPrintSurveyPop (List <String[]> surveyPopulationList){
+		int length = surveyPopulationList.size();		
+//		System.out.println(columnName[column]);
+		//print out Array:
+		for (int i=0; i<length; i++){
+			System.out.print(i+1 + " ");
+			for (int j=0; j<surveyPopulationList.get(i).length; j++){
+			
+			System.out.print(surveyPopulationList.get(i)[j] + " ");
+			}
+			System.out.println("");
+		}
+	}
+	
+	//Test: print out matSimList
+	public static void testPrintMATSimPopList (List <String[]> matSimPopulationList){
+		for(String[] ausgabe : matSimPopulationList){
+			System.out.println(ausgabe[0] + " " + ausgabe[1] + " " + ausgabe[2]);
+		}
+	}
+}
 // TODO Constructor: get all variables and files necessary (maybe: get config file)
 
