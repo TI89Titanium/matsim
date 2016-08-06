@@ -7,7 +7,7 @@ public class PopulationMatching {
 	public static void main(String[] args) {
 		// TODO prepare Data - input: raw survey data; output: data similar to matsim population data (MAP)
 		String csvFile = "C:/Users/Maximilian/Dropbox/01_KIT/Abschlussarbeit/UtilityMobility/Files/MIWDataRaw.csv";
-		String configFile = "../MATSimUtilityFunction/input/config_3agents.xml";
+		String configFile = "../MATSimUtilityFunction/input/config_popmatching.xml";
 		
 		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
 		
@@ -20,7 +20,7 @@ public class PopulationMatching {
 		//get Array with Population only with data in specific columns
 		//String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
 		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
-		//testPrintSurveyPop(surveyPopulationList);
+		testPrintSurveyPop(surveyPopulationList);
 		
 		//get population + get Data from Population (act + modes)
 		MATSimPopulationPreparation matSimPopulationPreparation = new MATSimPopulationPreparation(configFile);
@@ -54,6 +54,7 @@ public class PopulationMatching {
 		for(String[] ausgabe : matSimPopulationList){
 			System.out.println(ausgabe[0] + " " + ausgabe[1] + " " + ausgabe[2]);
 		}
+		System.out.println(matSimPopulationList.size());
 	}
 }
 // TODO Constructor: get all variables and files necessary (maybe: get config file)
