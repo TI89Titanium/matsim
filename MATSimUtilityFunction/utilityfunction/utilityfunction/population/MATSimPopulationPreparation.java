@@ -33,6 +33,8 @@ public class MATSimPopulationPreparation {
 			Activity firstActivity = ((PlanImpl)(person.getSelectedPlan())).getFirstActivity();
 			List <PlanElement> actsLegs = ((PlanImpl)(person.getSelectedPlan())).getPlanElements();
 			double distanceToWork = 0;
+			double longestDistance = 0;
+			String mode = "";
 			boolean hasHomeAct = false;
 			boolean hasWorkAct = false;
 			//go through all Persons Plan, sum distanceToWork
@@ -48,7 +50,12 @@ public class MATSimPopulationPreparation {
 					}
 				}else if (actLeg instanceof Leg){
 					if (hasHomeAct){
-						distanceToWork = distanceToWork +((Leg) actLeg).getRoute().getDistance();
+						double distance = ((Leg) actLeg).getRoute().getDistance();
+						distanceToWork = distanceToWork + distance;
+						if (distance >= longestDistance){
+							longestDistance = distance;
+							mode = ((Leg) actLeg).getMode();
+						}
 					}
 					
 				}
@@ -61,7 +68,7 @@ public class MATSimPopulationPreparation {
 				matchingList.add(characteristics);
 				characteristics[0] = person.getId().toString();
 				characteristics[1] = String.valueOf(distanceToWork);
-				characteristics[2] = "mode"; //not yet implemented
+				characteristics[2] = mode;
 				
 			}
 		}
