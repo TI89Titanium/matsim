@@ -12,15 +12,16 @@ import org.matsim.core.population.PlanImpl;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.utils.objectattributes.ObjectAttributes;
 
-public class MATSimPopulationPreparation {
+public class MATSimPopulation {
 	
 	final Scenario scenario;
 	final Population population;
 	List<String[]> matchingList = new ArrayList<String[]>();
 	
-	public MATSimPopulationPreparation(String configFile){
-		//TODO: get population from configFile
+	public MATSimPopulation(String configFile){
+		//get population from configFile
 		this.scenario = ScenarioUtils.loadScenario(ConfigUtils.loadConfig(configFile));
 		this.population = scenario.getPopulation();
 	}
@@ -90,5 +91,10 @@ public class MATSimPopulationPreparation {
 			}
 		}
 		return matchingList;
+	}
+	public ObjectAttributes addAttributesToMATSimPopulation(List <String[]> surveyPopulationList){
+		
+		
+		return null;
 	}
 }
