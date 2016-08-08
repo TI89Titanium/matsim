@@ -93,7 +93,17 @@ public class MATSimPopulation {
 		return matchingList;
 	}
 	public ObjectAttributes addAttributesToMATSimPopulation(List <String[]> surveyPopulationList){
-		
+		// TODO add attributes population input: pop-data + survey data
+//		public static void addAttributesToMATSimPop (Population population, List<String[]> surveyPopulationList){
+			
+//		}
+	/*		for (String[] person : matSimPopulationList){
+			//go through all survey Pop and find all matching -> number of matches
+			
+			//if number of matches = 0
+			
+		}
+	*/	
 		
 		return null;
 	}
