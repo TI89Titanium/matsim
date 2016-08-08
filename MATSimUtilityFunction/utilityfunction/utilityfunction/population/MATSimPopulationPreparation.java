@@ -24,6 +24,10 @@ public class MATSimPopulationPreparation {
 		this.scenario = ScenarioUtils.loadScenario(ConfigUtils.loadConfig(configFile));
 		this.population = scenario.getPopulation();
 	}
+	
+	public Population getPopulation(){
+		return this.population;
+	}
 		
 	public List<String[]> getMATSimPopulationList(){
 		//go through all Agents (person)
