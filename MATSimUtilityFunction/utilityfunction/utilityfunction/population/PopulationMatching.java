@@ -5,11 +5,11 @@ import java.util.List;
 public class PopulationMatching {
 
 	public static void main(String[] args) {
-		// TODO prepare Data - input: raw survey data; output: data similar to matsim population data (MAP)
+		//prepare Data - input: raw survey data; output: data similar to matsim population data (MAP)
 		String csvFile = "C:/Users/Maximilian/Dropbox/01_KIT/Abschlussarbeit/UtilityMobility/Files/MIWDataRaw.csv";
 		String configFile = "../MATSimUtilityFunction/input/config_popmatching.xml";
 		
-		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
+//		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
 		
 		//Test getter method (print out first column of csv with an index)
 //		int column = 0;	
@@ -19,18 +19,26 @@ public class PopulationMatching {
 		
 		//get Array with Population only with data in specific columns
 		//String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
-		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
-		testPrintSurveyPop(surveyPopulationList);
+//		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
+//		testPrintSurveyPop(surveyPopulationList);
 		
 		//get population + get Data from Population (act + modes)
 		MATSimPopulationPreparation matSimPopulationPreparation = new MATSimPopulationPreparation(configFile);
 		
 		List <String[]> matSimPopulationList = matSimPopulationPreparation.getMATSimPopulationList();
 		
-		testPrintMATSimPopList(matSimPopulationList);
+//		testPrintMATSimPopList(matSimPopulationList);
+		printMATSimPopInfo(matSimPopulationList);
 		
 		
-		// TODO match population input: pop-data + survey data
+		// TODO add attributes population input: pop-data + survey data
+/*		for (String[] person : matSimPopulationList){
+			//go through all survey Pop and find all matching -> number of matches
+			
+			//if number of matches = 0
+			
+		}
+	*/	
 		
 
 	}
@@ -56,6 +64,57 @@ public class PopulationMatching {
 		}
 		System.out.println(matSimPopulationList.size());
 	}
+	
+	//Test: print out matSimList
+	public static void printMATSimPopInfo (List <String[]> matSimPopulationList){
+		//Occ of modes walk (walk, transit_walk); bike; pt (colectivo, pt); car; ride(ride, taxi); train; combination; other
+
+		Integer[] modeOcc = {0,0,0,0,0,0,0,0};
+		int sum = 0;
+		String [] modes = {"walk", "bike", "pt", "car", "ride", "train", "combination", "other"};
+		
+		for(String[] print : matSimPopulationList){
+			if (print[2].equals("walk") || print[2].equals("transit_walk")){
+				modeOcc[0]++;
+				sum++;
+			}
+			else if (print[2].equals("bike")){
+				modeOcc[1]++;
+				sum++;
+			}
+			else if (print[2].equals("colectivo")||print[2].equals("pt")){
+				modeOcc[2]++;
+				sum++;
+			}
+			else if (print[2].equals("car")){
+				modeOcc[3]++;
+				sum++;
+			}
+			else if (print[2].equals("ride")||print[2].equals("taxi")){
+				modeOcc[4]++;
+				sum++;
+			}
+			else if (print[2].equals("train")){
+				modeOcc[5]++;
+				sum++;
+			}
+			else if (print[2].equals("combination")){
+				modeOcc[6]++;
+				sum++;
+			}
+			else if (print[2].equals("other")){
+				modeOcc[7]++;
+				sum++;
+			}
+				
+		}
+		System.out.println("Number of Agents: " + matSimPopulationList.size());
+		System.out.println("Number of Agents with recorded Mode: " + sum);
+		for (int i = 0; i<modeOcc.length; i++){
+			System.out.println("Mode " + modes[i] + ": " + modeOcc[i]);
+		}
+	}
+	
 }
 // TODO Constructor: get all variables and files necessary (maybe: get config file)
 
