@@ -8,12 +8,10 @@ import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
-import org.matsim.core.population.PersonImpl;
 import org.matsim.core.population.PlanImpl;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.utils.objectattributes.ObjectAttributes;
 
 public class MATSimPopulationPreparation {
 	
@@ -30,13 +28,16 @@ public class MATSimPopulationPreparation {
 	public List<String[]> getMATSimPopulationList(){
 		//go through all Agents (person)
 		for (Person person : scenario.getPopulation().getPersons().values()) {
-			Activity firstActivity = ((PlanImpl)(person.getSelectedPlan())).getFirstActivity();
 			List <PlanElement> actsLegs = ((PlanImpl)(person.getSelectedPlan())).getPlanElements();
 			double distanceToWork = 0;
 			double longestDistance = 0;
 			String mode = "";
+			String lastMode ="";
+			String currentMode ="";
 			boolean hasHomeAct = false;
 			boolean hasWorkAct = false;
+			int numberOfLegs = 0;
+			boolean modeIsCombination = false;
 			//go through all Persons Plan, sum distanceToWork
 			for (PlanElement actLeg : actsLegs){
 				if (actLeg instanceof Activity){ //Plan Element is an Activity
@@ -50,12 +51,19 @@ public class MATSimPopulationPreparation {
 					}
 				}else if (actLeg instanceof Leg){
 					if (hasHomeAct){
+						numberOfLegs++; //count number of Legs to work
 						double distance = ((Leg) actLeg).getRoute().getDistance();
 						distanceToWork = distanceToWork + distance;
+						currentMode = ((Leg) actLeg).getMode();
 						if (distance >= longestDistance){
 							longestDistance = distance;
-							mode = ((Leg) actLeg).getMode();
+							mode = currentMode;
 						}
+						//if more then one mode (excluding walking) is used to get to work, set mode to "combination"
+						if (numberOfLegs > 1 && !currentMode.equals(lastMode) && !currentMode.contains("walk") && !lastMode.contains("walk")){
+							modeIsCombination = true;
+						}
+						lastMode = currentMode;
 					}
 					
 				}
@@ -68,7 +76,12 @@ public class MATSimPopulationPreparation {
 				matchingList.add(characteristics);
 				characteristics[0] = person.getId().toString();
 				characteristics[1] = String.valueOf(distanceToWork);
-				characteristics[2] = mode;
+				if (modeIsCombination){ //set mode to "combination" if more than one mode (excluding walking) is used
+					characteristics[2] = "combination";
+				}
+				else{
+					characteristics[2] = mode;
+				}
 				
 			}
 		}
