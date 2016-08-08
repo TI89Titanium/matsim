@@ -9,7 +9,7 @@ public class PopulationMatching {
 		String csvFile = "C:/Users/Maximilian/Dropbox/01_KIT/Abschlussarbeit/UtilityMobility/Files/MIWDataRaw.csv";
 		String configFile = "../MATSimUtilityFunction/input/config_popmatching.xml";
 		
-//		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
+		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
 		
 		//Test getter method (print out first column of csv with an index)
 //		int column = 0;	
@@ -19,11 +19,11 @@ public class PopulationMatching {
 		
 		//get Array with Population only with data in specific columns
 		//String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
-//		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
+		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
 //		testPrintSurveyPop(surveyPopulationList);
 		
 		//get population + get Data from Population (act + modes)
-		MATSimPopulationPreparation matSimPopulationPreparation = new MATSimPopulationPreparation(configFile);
+		MATSimPopulation matSimPopulationPreparation = new MATSimPopulation(configFile);
 		
 		List <String[]> matSimPopulationList = matSimPopulationPreparation.getMATSimPopulationList();
 		
@@ -31,17 +31,11 @@ public class PopulationMatching {
 		printMATSimPopInfo(matSimPopulationList);
 		
 		
-		// TODO add attributes population input: pop-data + survey data
-/*		for (String[] person : matSimPopulationList){
-			//go through all survey Pop and find all matching -> number of matches
-			
-			//if number of matches = 0
-			
-		}
-	*/	
+
 		
 
 	}
+	
 	//Test: print out array
 	public static void testPrintSurveyPop (List <String[]> surveyPopulationList){
 		int length = surveyPopulationList.size();		
