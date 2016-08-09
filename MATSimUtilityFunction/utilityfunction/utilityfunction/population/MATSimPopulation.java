@@ -2,6 +2,7 @@ package utilityfunction.population;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Activity;
@@ -107,15 +108,20 @@ public class MATSimPopulation {
 			
 //		}
 		matchingList = this.getMATSimPopulationList(); //MATSimPopulation List needs to be: {"ID", "DistanceToWork", "ModeToWork"}
+		final ObjectAttributes personAttributes = population.getPersonAttributes();
+		final String DAILY_INCOME = "DAILY_INCOME";
+		
+		int noMatches = 0;
 		
 		for (String[] agent : matchingList){
 			//go through all survey Pop and find all matching -> number of matches
 			int modeNumberMATSim = this.setModeNumberMATSim(agent[2]); //mode information
 			int numberOfMatches = 0;
-			//monthlyIncome times 12 devided by 240 (working days) 
-			//(can also be devided by number of houshold members if information is available)
+			
 			List<Double> dailyIncome = new ArrayList<Double>();
+			
 			List<String> modePreferenceType = new ArrayList<String>();
+			
 			for (String[] person: surveyPopulationList){
 				int modeNumberSurvey = this.setModeNumberSurvey(person[3]); //mode: "MOS4"
 				if (modeNumberSurvey == modeNumberMATSim){
@@ -123,9 +129,10 @@ public class MATSimPopulation {
 					if(this.compareDistance(agent[1], person[2])){
 						numberOfMatches++;
 						//save Attributes to List : income, mode-Preference-Type
-						//!!!!could write always on the same List-Element
-						dailyIncome.add(Double.parseDouble(person[4])*12/240);
-						modePreferenceType.add(person[5]);
+						
+						dailyIncome.add(this.getDailyIncome(person[4],1)); //set number of persons in HH to 1
+						
+						//modePreferenceType.add(person[5]); //set up survey with column MPT
 						
 					}
 					
@@ -134,20 +141,58 @@ public class MATSimPopulation {
 			}
 			if (numberOfMatches == 0){
 				//set attributes random over all survey pop
+				Random randomGenerator = new Random(); 
+				int index = randomGenerator.nextInt(surveyPopulationList.size());
+				personAttributes.putAttribute(agent[0], DAILY_INCOME, this.getDailyIncome(surveyPopulationList.get(index)[4],1)); //
+				noMatches++;
 			}
 			else if (numberOfMatches == 1){
 				//set Attributes from spesific surveyPerson
+				personAttributes.putAttribute(agent[0], DAILY_INCOME, dailyIncome.get(0));
+				
 			}
 			else if (numberOfMatches > 1){
 				//set Attributes random over matching survey Pop
+//				dailyIncome.removeIf(Objects::isNull); //remove "null" elements
+				Random randomGenerator = new Random(); 
+				int index = randomGenerator.nextInt(dailyIncome.size()); //generates random Integer between 0 (included) and size of List dailyIncome
+				personAttributes.putAttribute(agent[0], DAILY_INCOME, dailyIncome.get(index));
 			}
 			//reset (empty) Attribute-List
-			
+//			System.out.println(numberOfMatches);
 		}
 	
-		
-		return null; //maybe void (just generating/adding to the attribute xml-file
+		System.out.println("Number of Agents w/o matches in Sruvey: " + noMatches);
+
+		return personAttributes; //maybe void (just generating/adding to the attribute xml-file
 	}
+	
+	//monthlyIncome times 12 devided by 240 (working days) 
+	//(can also be devided by number of houshold members if information is available)
+	private Double getDailyIncome(String income, int personsInHoushold) {
+		double dailyIncome = -1;
+		if (income.equals("A")){
+			dailyIncome = (double) 500 * 12 / (personsInHoushold * 240);
+			}
+		else if (income.equals("B")){
+			dailyIncome = (double) 1500 * 12 / (personsInHoushold * 240);
+		}
+		else if (income.equals("C")){
+			dailyIncome = (double) 2500 * 12 / (personsInHoushold * 240);
+		}
+		else if (income.equals("D")){
+			dailyIncome = (double) 3500 * 12 / (personsInHoushold * 240);
+		}
+		else if (income.equals("E")){
+			dailyIncome = (double) 4500 * 12 / (personsInHoushold * 240);
+		}
+		else if (income.equals("F")){
+			dailyIncome = (double) 5500 * 12 / (personsInHoushold * 240);
+		}
+		return dailyIncome;
+}
+
+
 	private int setModeNumberMATSim (String mode){
 		//declare mode-compare Integer 1 - "walk", 2 - "bike", 3 - "pt", 4 - "car", 5 - "ride", 6 - "train", 7- "combination", 8 - "other"};
 		int modeNumber = 0;
@@ -261,5 +306,9 @@ public class MATSimPopulation {
 		return sameDistance;
 		
 		
+	}
+
+	public Scenario getSzenario() {
+		return this.scenario;
 	}
 }
