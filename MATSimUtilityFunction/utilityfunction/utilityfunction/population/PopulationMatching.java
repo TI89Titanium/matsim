@@ -2,6 +2,11 @@ package utilityfunction.population;
 
 import java.util.List;
 
+import org.matsim.api.core.v01.Scenario;
+import org.matsim.core.controler.Controler;
+
+import utilityfunction.controler.UtilityFunctionControler;
+
 public class PopulationMatching {
 
 	public static void main(String[] args) {
@@ -23,15 +28,30 @@ public class PopulationMatching {
 //		testPrintSurveyPop(surveyPopulationList);
 		
 		//get population + get Data from Population (act + modes)
-		MATSimPopulation matSimPopulationPreparation = new MATSimPopulation(configFile);
+		MATSimPopulation matSimPopulation = new MATSimPopulation(configFile);
 		
-		List <String[]> matSimPopulationList = matSimPopulationPreparation.getMATSimPopulationList();
-		
+		List <String[]> matSimPopulationList = matSimPopulation.getMATSimPopulationList();
 //		testPrintMATSimPopList(matSimPopulationList);
 		printMATSimPopInfo(matSimPopulationList);
 		
+		matSimPopulation.addAttributesToMATSimPopulation(surveyPopulationList);
+		
+		Scenario scenario = matSimPopulation.getSzenario();
 		
 
+		//Start controler to get check person Attributes File
+		Controler controler = new Controler(scenario);
+		
+		//TODO: define routing for other modes beside car or define other modes
+				// first try agents with "normal" matsim-modes
+				UtilityFunctionControler.setNetworkModeRouting(controler);
+				
+		//TODO: adding pt fare
+				
+				// adding basic strategies for car and non-car users
+				UtilityFunctionControler.setBasicStrategiesForSubpopulations(controler);
+		
+		controler.run();
 		
 
 	}
