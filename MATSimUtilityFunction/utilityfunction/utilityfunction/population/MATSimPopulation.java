@@ -92,19 +92,174 @@ public class MATSimPopulation {
 		}
 		return matchingList;
 	}
+	
+	
 	public ObjectAttributes addAttributesToMATSimPopulation(List <String[]> surveyPopulationList){
+		
+		// surveyPopulationList needs to be {"UserID", "DTWmax","MOS3","MOS4", "SOC6", "MPT"}
+		// MOS3: Distance to Work A through F
+		// MOS4: Main Mode to Work A though H
+		// SOC6: monthly income A through F
+		// MPT: ModePreferenceType (based on usage): {"Pragmatic Long-Distance Driver", "Auto Addicted", "Active Public Transportation Lover", "Lazy Public Transportation Lover", "Active Auto Lover"}
 		// TODO add attributes population input: pop-data + survey data
+		
 //		public static void addAttributesToMATSimPop (Population population, List<String[]> surveyPopulationList){
 			
 //		}
-	/*		for (String[] person : matSimPopulationList){
+		matchingList = this.getMATSimPopulationList(); //MATSimPopulation List needs to be: {"ID", "DistanceToWork", "ModeToWork"}
+		
+		for (String[] agent : matchingList){
 			//go through all survey Pop and find all matching -> number of matches
-			
-			//if number of matches = 0
+			int modeNumberMATSim = this.setModeNumberMATSim(agent[2]); //mode information
+			int numberOfMatches = 0;
+			//monthlyIncome times 12 devided by 240 (working days) 
+			//(can also be devided by number of houshold members if information is available)
+			List<Double> dailyIncome = new ArrayList<Double>();
+			List<String> modePreferenceType = new ArrayList<String>();
+			for (String[] person: surveyPopulationList){
+				int modeNumberSurvey = this.setModeNumberSurvey(person[3]); //mode: "MOS4"
+				if (modeNumberSurvey == modeNumberMATSim){
+					//cast String to double and compare distance "MOS3"
+					if(this.compareDistance(agent[1], person[2])){
+						numberOfMatches++;
+						//save Attributes to List : income, mode-Preference-Type
+						//!!!!could write always on the same List-Element
+						dailyIncome.add(Double.parseDouble(person[4])*12/240);
+						modePreferenceType.add(person[5]);
+						
+					}
+					
+				}
+				
+			}
+			if (numberOfMatches == 0){
+				//set attributes random over all survey pop
+			}
+			else if (numberOfMatches == 1){
+				//set Attributes from spesific surveyPerson
+			}
+			else if (numberOfMatches > 1){
+				//set Attributes random over matching survey Pop
+			}
+			//reset (empty) Attribute-List
 			
 		}
-	*/	
+	
 		
-		return null;
+		return null; //maybe void (just generating/adding to the attribute xml-file
+	}
+	private int setModeNumberMATSim (String mode){
+		//declare mode-compare Integer 1 - "walk", 2 - "bike", 3 - "pt", 4 - "car", 5 - "ride", 6 - "train", 7- "combination", 8 - "other"};
+		int modeNumber = 0;
+		if (mode.equals("walk") || mode.equals("transit_walk")){
+			modeNumber = 1;
+		}
+		else if (mode.equals("bike")){
+			modeNumber = 2;
+		}
+		else if (mode.equals("colectivo")||mode.equals("pt")){
+			modeNumber = 3;
+		}
+		else if (mode.equals("car")){
+			modeNumber = 4;
+		}
+		else if (mode.equals("ride")||mode.equals("taxi")){
+			modeNumber = 5;
+		}
+		else if (mode.equals("train")){
+			modeNumber = 6;
+		}
+		else if (mode.equals("combination")){
+			modeNumber = 7;
+		}
+		else if (mode.equals("other")){
+			modeNumber = 8;
+	}
+		return modeNumber;
+}
+	private int setModeNumberSurvey (String mode){
+		//declare mode-compare Integer 1 - "walk", 2 - "bike", 3 - "pt", 4 - "car", 5 - "ride", 6 - "train", 7- "combination", 8 - "other"}
+		
+		int modeNumber = 0;
+		if (mode.equals("A")){
+			modeNumber = 1;
+		}
+		else if (mode.equals("B")){
+			modeNumber = 2;
+		}
+		else if (mode.equals("C")){
+			modeNumber = 3;
+		}
+		else if (mode.equals("D") || mode.equals("F")){ //motorbike counts as car
+			modeNumber = 4;
+		}
+		else if (mode.equals("E")){
+			modeNumber = 5;
+		}
+		else if (mode.equals("G")){
+			modeNumber = 6;
+		}
+		else if (mode.equals("H")){
+			modeNumber = 7;
+		}
+		
+		//no mode "other" in survey
+//		else if (mode.equals("other")){
+//			modeNumber = 8;
+
+		return modeNumber;
+	}
+	
+	private boolean compareDistance (String distanceMATSim, String distanceRangeSurvey){
+		boolean sameDistance = false;
+		double distanceMATSimValue = Double.parseDouble(distanceMATSim);
+		double lowerBound;
+		double upperBound;
+		
+		//set bounds for survey-answers and compare to distanceMATSimValue
+		if (distanceRangeSurvey.equals("A")){
+			upperBound = 1;
+			if (distanceMATSimValue <= upperBound){
+				sameDistance = true;
+			}
+		}
+		else if (distanceRangeSurvey.equals("B")){
+			lowerBound = 1;
+			upperBound = 5;
+			if (distanceMATSimValue > lowerBound || distanceMATSimValue <= upperBound){
+				sameDistance = true;
+			}
+		}
+		else if (distanceRangeSurvey.equals("C")){
+			lowerBound = 5;
+			upperBound = 10;
+			if (distanceMATSimValue > lowerBound || distanceMATSimValue <= upperBound){
+				sameDistance = true;
+			}
+		}
+		else if (distanceRangeSurvey.equals("D")){
+			lowerBound = 10;
+			upperBound = 30;
+			if (distanceMATSimValue > lowerBound || distanceMATSimValue <= upperBound){
+				sameDistance = true;
+			}
+		}
+		else if (distanceRangeSurvey.equals("E")){
+			lowerBound = 30;
+			upperBound = 50;
+			if (distanceMATSimValue > lowerBound || distanceMATSimValue <= upperBound){
+				sameDistance = true;
+			}
+		}
+		else if (distanceRangeSurvey.equals("F")){
+			lowerBound = 50;
+			if (distanceMATSimValue > lowerBound){
+				sameDistance = true;
+			}
+		}
+		
+		return sameDistance;
+		
+		
 	}
 }
