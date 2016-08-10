@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class SurveyDataPreparation {
+public class SurveyData {
 
 	//declaration
 	String csvFile;
@@ -26,7 +26,7 @@ public class SurveyDataPreparation {
 
 
 	//constructor (input file (String))
-	public SurveyDataPreparation(String csvFile){
+	public SurveyData(String csvFile){
 		this.csvFile = csvFile;
 		this.surveyPopulation = readFile();
 		this.surveyPopulationList = Arrays.asList(surveyPopulation);

@@ -3,61 +3,53 @@ package utilityfunction.population;
 import java.util.List;
 
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.core.controler.Controler;
 
-import utilityfunction.controler.UtilityFunctionControler;
 
 public class PopulationMatching {
-
-	public static void main(String[] args) {
-		//prepare Data - input: raw survey data; output: data similar to matsim population data (MAP)
-		String csvFile = "C:/Users/Maximilian/Dropbox/01_KIT/Abschlussarbeit/UtilityMobility/Files/MIWDataRaw.csv";
-		String configFile = "../MATSimUtilityFunction/input/config_popmatching.xml";
+	
+	public static final String[] columnSelection = {"UserID", "DTWmax","MOS3","MOS4", "SOC6"};
+	private String csvFile; 
+	private String configFile;
+	
+	public PopulationMatching (String configFile, String csvFile){
+		this.configFile = configFile;
+		this.csvFile = csvFile;
 		
-		SurveyDataPreparation SurveyDataPreparation = new SurveyDataPreparation(csvFile);
+	}
+	
+	public Scenario matchPopulation() {
 		
-		//Test getter method (print out first column of csv with an index)
-//		int column = 0;	
-//		String[] columnName =  SurveyDataPreparation.getSurveyPopulationColumnNameArray();
-		
-		String[] columnSelection = {"UserID", "DTWmax","MOS3","MOS4", "SOC6"};
+		//prepare Data - input: raw survey data
+		SurveyData surveyData = new SurveyData(csvFile);
 		
 		//get Array with Population only with data in specific columns
-		//String[][] surveyPopulation = SurveyDataPreparation.getSurveyPopulationArray(columnSelection);
-		List <String[]> surveyPopulationList = SurveyDataPreparation.getSurveyPopulationList(columnSelection);
+		List <String[]> surveyPopulationList = surveyData.getSurveyPopulationList(columnSelection);
+		
 //		testPrintSurveyPop(surveyPopulationList);
 		
 		//get population + get Data from Population (act + modes)
 		MATSimPopulation matSimPopulation = new MATSimPopulation(configFile);
 		
 		List <String[]> matSimPopulationList = matSimPopulation.getMATSimPopulationList();
-//		testPrintMATSimPopList(matSimPopulationList);
+
 		printMATSimPopInfo(matSimPopulationList);
 		
-		matSimPopulation.addAttributesToMATSimPopulation(surveyPopulationList);
+		matSimPopulation.addAttributes(surveyPopulationList);
 		
-		Scenario scenario = matSimPopulation.getSzenario();
+		Scenario scenario = matSimPopulation.getScenario();
 		
-
-		//Start controler to get check person Attributes File
-		Controler controler = new Controler(scenario);
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		System.out.println("Added additional Attributes to Attributes-File");
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
 		
-		//TODO: define routing for other modes beside car or define other modes
-				// first try agents with "normal" matsim-modes
-				UtilityFunctionControler.setNetworkModeRouting(controler);
-				
-		//TODO: adding pt fare
-				
-				// adding basic strategies for car and non-car users
-				UtilityFunctionControler.setBasicStrategiesForSubpopulations(controler);
+		return scenario;
 		
-		controler.run();
-		
-
 	}
 	
 	//Test: print out array
-	public static void testPrintSurveyPop (List <String[]> surveyPopulationList){
+	private void testPrintSurveyPop (List <String[]> surveyPopulationList){
 		int length = surveyPopulationList.size();		
 //		System.out.println(columnName[column]);
 		//print out Array:
@@ -72,7 +64,7 @@ public class PopulationMatching {
 	}
 	
 	//Test: print out matSimList
-	public static void testPrintMATSimPopList (List <String[]> matSimPopulationList){
+	private void testPrintMATSimPopList (List <String[]> matSimPopulationList){
 		for(String[] ausgabe : matSimPopulationList){
 			System.out.println(ausgabe[0] + " " + ausgabe[1] + " " + ausgabe[2]);
 		}
@@ -80,7 +72,7 @@ public class PopulationMatching {
 	}
 	
 	//Test: print out matSimList
-	public static void printMATSimPopInfo (List <String[]> matSimPopulationList){
+	private void printMATSimPopInfo (List <String[]> matSimPopulationList){
 		//Occ of modes walk (walk, transit_walk); bike; pt (colectivo, pt); car; ride(ride, taxi); train; combination; other
 
 		Integer[] modeOcc = {0,0,0,0,0,0,0,0};

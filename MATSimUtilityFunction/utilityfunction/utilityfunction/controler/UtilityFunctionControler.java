@@ -21,11 +21,14 @@ import org.matsim.core.scoring.functions.CharyparNagelScoringParameters;
 import org.matsim.utils.objectattributes.ObjectAttributes;
 
 import utilityfunction.constants.UtilityFunctionConstants;
+import utilityfunction.population.PopulationMatching;
 
 
 public class UtilityFunctionControler {
 	
 	private static String inputPath = "../MATSimUtilityFunction/input/";
+	public static final String csvFileMatching = "C:/Users/Maximilian/Dropbox/01_KIT/Abschlussarbeit/UtilityMobility/Files/MIWDataRaw.csv";
+	public static final String configFileMatching = "../MATSimUtilityFunction/input/config_popmatching.xml";
 
 //	private static boolean doModeChoice = true;
 	
@@ -44,19 +47,13 @@ public class UtilityFunctionControler {
 		
 		Config config = ConfigUtils.loadConfig(configFile);
 		
-		Scenario scenario = ScenarioUtils.loadScenario(config);
+		//Scenario scenario = ScenarioUtils.loadScenario(config);
 		
-		//add agent characteristcs-boolean to Attribute file for test purpose
-		final String DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE = "DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE";
-		final ObjectAttributes personAttributes = scenario.getPopulation().getPersonAttributes();
-		for (Person person : scenario.getPopulation().getPersons().values()) {
-			if (Integer.parseInt(person.getId().toString()) % 2 == 0) {
-				personAttributes.putAttribute(person.getId().toString(), DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE, true);
-			} else {
-				personAttributes.putAttribute(person.getId().toString(), DISLIKES_LEAVING_EARLY_AND_COMING_HOME_LATE, false);
-			}
-		}
-
+		//add agent characteristcs/attributes via PopulationMatching input:configFile + csvFile; return scenario file with changed attribute-Infos
+		PopulationMatching populationMatching = new PopulationMatching(configFileMatching, csvFileMatching);
+		Scenario scenario = populationMatching.matchPopulation();
+		
+		
 		Controler controler = new Controler(scenario);
 	
 //TODO: define routing for other modes beside car or define other modes
@@ -69,6 +66,7 @@ public class UtilityFunctionControler {
 		setBasicStrategiesForSubpopulations(controler);
 		
 //TODO: mapping agents' activities to links on the road network to avoid being stuck on the transit network
+		
 
 
 		// add new scoring function via ScoringFunctionFactory Interface.
@@ -98,6 +96,7 @@ public class UtilityFunctionControler {
 	
 
 	// methods for routing-settings for all modes
+	//public only for test
 	private static void setNetworkModeRouting(Controler controler) {
 		controler.addOverridingModule(new AbstractModule() {
 			@Override
@@ -117,6 +116,7 @@ public class UtilityFunctionControler {
 	
 	
 	// mehtods for strategy setting
+	//public only for test
 	private static void setBasicStrategiesForSubpopulations(MatsimServices controler) {
 		setReroute("carAvail", controler);
 		setChangeExp("carAvail", controler);
