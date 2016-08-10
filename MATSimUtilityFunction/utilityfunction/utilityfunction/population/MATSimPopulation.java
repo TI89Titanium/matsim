@@ -95,7 +95,7 @@ public class MATSimPopulation {
 	}
 	
 	
-	public ObjectAttributes addAttributesToMATSimPopulation(List <String[]> surveyPopulationList){
+	public ObjectAttributes addAttributes(List <String[]> surveyPopulationList){
 		
 		// surveyPopulationList needs to be {"UserID", "DTWmax","MOS3","MOS4", "SOC6", "MPT"}
 		// MOS3: Distance to Work A through F
@@ -143,7 +143,7 @@ public class MATSimPopulation {
 				//set attributes random over all survey pop
 				Random randomGenerator = new Random(); 
 				int index = randomGenerator.nextInt(surveyPopulationList.size());
-				personAttributes.putAttribute(agent[0], DAILY_INCOME, this.getDailyIncome(surveyPopulationList.get(index)[4],1)); //
+				personAttributes.putAttribute(agent[0], DAILY_INCOME, this.getDailyIncome(surveyPopulationList.get(index)[4],1)); //one person in houshold
 				noMatches++;
 			}
 			else if (numberOfMatches == 1){
@@ -153,7 +153,7 @@ public class MATSimPopulation {
 			}
 			else if (numberOfMatches > 1){
 				//set Attributes random over matching survey Pop
-//				dailyIncome.removeIf(Objects::isNull); //remove "null" elements
+//				dailyIncome.removeIf(Objects::isNull); //remove "null" elements (not neccessary)
 				Random randomGenerator = new Random(); 
 				int index = randomGenerator.nextInt(dailyIncome.size()); //generates random Integer between 0 (included) and size of List dailyIncome
 				personAttributes.putAttribute(agent[0], DAILY_INCOME, dailyIncome.get(index));
@@ -163,7 +163,25 @@ public class MATSimPopulation {
 		}
 	
 		System.out.println("Number of Agents w/o matches in Sruvey: " + noMatches);
-
+		
+		int allreadyhasIncomeAttribute = 0;
+		//add Attributes random to other population
+		for (Person person : population.getPersons().values()) {
+			if (personAttributes.getAttribute(person.getId().toString(), DAILY_INCOME) == null) { //person has no income attribute
+				
+				Random randomGenerator = new Random(); 
+				int index = randomGenerator.nextInt(surveyPopulationList.size());
+				personAttributes.putAttribute(person.getId().toString(), DAILY_INCOME, this.getDailyIncome(surveyPopulationList.get(index)[4],1));
+			}
+			else{
+				allreadyhasIncomeAttribute++;
+			}
+			if (true){ //person has MPT attribute
+				
+			}
+		}
+		System.out.println("agents already having an income Attribute (must be equal to number of agents having home-work info): " + allreadyhasIncomeAttribute);
+		
 		return personAttributes; //maybe void (just generating/adding to the attribute xml-file
 	}
 	
@@ -308,7 +326,7 @@ public class MATSimPopulation {
 		
 	}
 
-	public Scenario getSzenario() {
+	public Scenario getScenario() {
 		return this.scenario;
 	}
 }
